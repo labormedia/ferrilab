@@ -18,6 +18,8 @@ pub use crate::types::{
 	Radon,
 };
 
+use loom;
+
 #[doc = include_str!("../doc/radium.md")]
 pub trait Radium: seal::Sealed {
 	/// The primitive type that this implementor makes shared-mutable.
@@ -29,7 +31,7 @@ pub trait Radium: seal::Sealed {
 	/// If the implementor is atomic, this calls [`atomic::fence`] with the
 	/// given `Ordering`; otherwise, it does nothing.
 	///
-	/// [`atomic::fence`]: core::sync::atomic::fence
+	/// [`atomic::fence`]: loom::sync::atomic::fence
 	fn fence(order: Ordering);
 
 	/// Returns a mutable reference to the underlying value.
@@ -50,7 +52,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::load`].
 	///
-	/// [`AtomicUsize::load`]: core::sync::atomic::AtomicUsize::load
+	/// [`AtomicUsize::load`]: loom::sync::atomic::AtomicUsize::load
 	fn load(&self, order: Ordering) -> Self::Item;
 
 	/// Stores a value into this object.
@@ -59,7 +61,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::store`].
 	///
-	/// [`AtomicUsize::store`]: core::sync::atomic::AtomicUsize::store
+	/// [`AtomicUsize::store`]: loom::sync::atomic::AtomicUsize::store
 	fn store(&self, value: Self::Item, order: Ordering);
 
 	/// Swaps a new value with the value stored in this object.
@@ -68,7 +70,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::swap`].
 	///
-	/// [`AtomicUsize::swap`]: core::sync::atomic::AtomicUsize::swap
+	/// [`AtomicUsize::swap`]: loom::sync::atomic::AtomicUsize::swap
 	fn swap(&self, value: Self::Item, order: Ordering) -> Self::Item;
 
 	/// Stores a new value into this object if (and only if) the value currently
@@ -82,7 +84,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::compare_and_swap`].
 	///
-	/// [`AtomicUsize::compare_and_swap`]: core::sync::atomic::AtomicUsize::compare_and_swap
+	/// [`AtomicUsize::compare_and_swap`]: loom::sync::atomic::AtomicUsize::compare_and_swap
 	#[deprecated = "Use `compare_exchange` or `compare_exchange_weak` instead"]
 	fn compare_and_swap(
 		&self,
@@ -103,7 +105,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::compare_exchange`].
 	///
-	/// [`AtomicUsize::compare_exchange`]: core::sync::atomic::AtomicUsize::compare_exchange
+	/// [`AtomicUsize::compare_exchange`]: loom::sync::atomic::AtomicUsize::compare_exchange
 	fn compare_exchange(
 		&self,
 		current: Self::Item,
@@ -125,7 +127,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::compare_exchange_weak`].
 	///
-	/// [`AtomicUsize::compare_exchange_weak`]: core::sync::atomic::AtomicUsize::compare_exchange_weak
+	/// [`AtomicUsize::compare_exchange_weak`]: loom::sync::atomic::AtomicUsize::compare_exchange_weak
 	fn compare_exchange_weak(
 		&self,
 		current: Self::Item,
@@ -142,7 +144,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_and`].
 	///
-	/// [`AtomicUsize::fetch_and`]: core::sync::atomic::AtomicUsize::fetch_and
+	/// [`AtomicUsize::fetch_and`]: loom::sync::atomic::AtomicUsize::fetch_and
 	fn fetch_and(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: BitOps;
 
@@ -154,7 +156,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_nand`].
 	///
-	/// [`AtomicUsize::fetch_nand`]: core::sync::atomic::AtomicUsize::fetch_nand
+	/// [`AtomicUsize::fetch_nand`]: loom::sync::atomic::AtomicUsize::fetch_nand
 	fn fetch_nand(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: BitOps;
 
@@ -166,7 +168,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_or`].
 	///
-	/// [`AtomicUsize::fetch_or`]: core::sync::atomic::AtomicUsize::fetch_or
+	/// [`AtomicUsize::fetch_or`]: loom::sync::atomic::AtomicUsize::fetch_or
 	fn fetch_or(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: BitOps;
 
@@ -178,7 +180,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_xor`].
 	///
-	/// [`AtomicUsize::fetch_xor`]: core::sync::atomic::AtomicUsize::fetch_xor
+	/// [`AtomicUsize::fetch_xor`]: loom::sync::atomic::AtomicUsize::fetch_xor
 	fn fetch_xor(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: BitOps;
 
@@ -190,7 +192,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_add`].
 	///
-	/// [`AtomicUsize::fetch_add`]: core::sync::atomic::AtomicUsize::fetch_add
+	/// [`AtomicUsize::fetch_add`]: loom::sync::atomic::AtomicUsize::fetch_add
 	fn fetch_add(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: NumericOps;
 
@@ -202,7 +204,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_sub`].
 	///
-	/// [`AtomicUsize::fetch_sub`]: core::sync::atomic::AtomicUsize::fetch_sub
+	/// [`AtomicUsize::fetch_sub`]: loom::sync::atomic::AtomicUsize::fetch_sub
 	fn fetch_sub(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: NumericOps;
 
@@ -213,7 +215,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_max`].
 	///
-	/// [`AtomicUsize::fetch_max`]: core::sync::atomic::AtomicUsize::fetch_max
+	/// [`AtomicUsize::fetch_max`]: loom::sync::atomic::AtomicUsize::fetch_max
 	fn fetch_max(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: NumericOps;
 
@@ -224,7 +226,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_min`].
 	///
-	/// [`AtomicUsize::fetch_min`]: core::sync::atomic::AtomicUsize::fetch_min
+	/// [`AtomicUsize::fetch_min`]: loom::sync::atomic::AtomicUsize::fetch_min
 	fn fetch_min(&self, value: Self::Item, order: Ordering) -> Self::Item
 	where Self::Item: NumericOps;
 
@@ -244,7 +246,7 @@ pub trait Radium: seal::Sealed {
 	///
 	/// See also: [`AtomicUsize::fetch_update`].
 	///
-	/// [`AtomicUsize::fetch_update`]: core::sync::atomic::AtomicUsize::fetch_update
+	/// [`AtomicUsize::fetch_update`]: loom::sync::atomic::AtomicUsize::fetch_update
 	fn fetch_update<F>(
 		&self,
 		set_order: Ordering,
@@ -284,7 +286,7 @@ macro_rules! radium {
 
 			#[inline]
 			fn fence(order: Ordering) {
-				core::sync::atomic::fence(order);
+				loom::sync::atomic::fence(order);
 			}
 
 			#[inline]
@@ -809,7 +811,7 @@ where
 	radium!(wrappers);
 
 	fn fence(order: Ordering) {
-		core::sync::atomic::fence(order);
+		loom::sync::atomic::fence(order);
 	}
 }
 
@@ -842,7 +844,8 @@ where
 #[cfg(test)]
 mod tests {
 	#[allow(unused_imports)]
-	use core::sync::atomic::*;
+	// use loom::sync::atomic::*;
+	use loom::sync::atomic::AtomicBool;
 
 	use static_assertions::*;
 
@@ -910,6 +913,7 @@ mod tests {
 	fn maybe_atom() {
 		#[cfg(target_has_atomic = "8")]
 		{
+			#[cfg(not(any(loom, feature="loom")))]
 			assert_impl_all!(AtomicBool: Radium<Item = bool>);
 			assert_impl_all!(AtomicI8: Radium<Item = i8>);
 			assert_impl_all!(AtomicU8: Radium<Item = u8>);

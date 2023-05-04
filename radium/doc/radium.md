@@ -36,6 +36,6 @@ should instead use the [`radium::types`][types] module. The types in that module
 all implement `Radium` as their only behavior, but may be easier to use when you
 are describing particular data types.
 
-[atomic]: core::sync::atomic
+[atomic]: loom::sync::atomic
 [types]: crate::types
 [`funty`]: //crates.io/crates/funty

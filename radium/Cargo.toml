@@ -35,10 +35,14 @@ edition = "2021"
 rust-version = "1.60"
 
 [dependencies]
-
+loom = {version="0.5", optional=true}
 
 [target.'cfg(loom)'.dependencies]
 loom = "0.5"
 
 [dev-dependencies]
 static_assertions = "1.1"
+
+[features]
+default=["loom"]
+loom = [ "dep:loom" ]
