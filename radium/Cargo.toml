@@ -36,5 +36,9 @@ rust-version = "1.60"
 
 [dependencies]
 
+
+[target.'cfg(loom)'.dependencies]
+loom = "0.5"
+
 [dev-dependencies]
 static_assertions = "1.1"
