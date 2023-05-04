@@ -56,7 +56,7 @@ std = [
 ]
 testing = [
 ]
-loom = ["radium/loom"]
+loom = ["radium/loom", "atomic"]
 
 [dependencies]
 radium = {version="1.0.0", path="../radium"}
