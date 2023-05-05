@@ -57,7 +57,7 @@ testing = []
 loom = ["atomic", "alloc"]
 
 [dependencies]
-radium = "0.7" #{version="1.0.0", path="../radium"}
+radium = {version="0.7", default-features=false} #{version="1.0.0", path="../radium"}
 tap = "1"
 
 [dependencies.funty]
