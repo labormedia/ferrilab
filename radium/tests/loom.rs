@@ -1,8 +1,9 @@
+#[cfg(any(loom, feature="loom"))]
 #[cfg(test)]
 mod tests {
 	use loom::sync::Arc;
-	use loom::sync::atomic::AtomicUsize;
-	use loom::sync::atomic::Ordering::{Acquire, Release, Relaxed};
+	use core::sync::atomic::AtomicUsize;
+	use core::sync::atomic::Ordering::{Acquire, Release, Relaxed};
 	use loom::thread;
 
 	#[test]

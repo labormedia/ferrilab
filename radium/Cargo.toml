@@ -42,7 +42,8 @@ loom = "0.5"
 
 [dev-dependencies]
 static_assertions = "1.1"
+once_cell = "1.13.0"
 
 [features]
-default=["loom"]
+default=[]
 loom = [ "dep:loom" ]

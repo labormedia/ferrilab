@@ -3,12 +3,22 @@
 
 use std::{
 	cell::Cell,
-	sync::atomic::{
-		AtomicU64,
-		Ordering,
-	},
 	thread,
 	time::Duration,
+};
+
+use once_cell::sync::Lazy;
+
+#[cfg(not(any(loom, feature="loom")))]
+use core::sync::atomic::{
+	AtomicU64,
+	Ordering,
+};
+
+#[cfg(any(loom, feature="loom"))]
+use loom::sync::atomic::{
+	AtomicU64,
+	Ordering,
 };
 
 use radium::{
@@ -48,8 +58,12 @@ fn run_thrice<R: Radium<Item = u64> + Sync>(item: &'static R, ident: u8) {
 	}
 }
 
-static ATOM: AtomicU64 = AtomicU64::new(0);
-static RADIUM: RadiumU64 = RadiumU64::new(0);
+static ATOM: Lazy<AtomicU64> = Lazy::new(||{
+	AtomicU64::new(0)
+});
+static RADIUM: Lazy<RadiumU64> = Lazy::new(||{
+	RadiumU64::new(0)
+});
 
 fn main() {
 	let cell = Cell::new(0u64);
@@ -59,14 +73,14 @@ fn main() {
 	let radon = Radon::new(0u64);
 
 	println!("atoms");
-	run_thrice(&ATOM, 0);
+	run_thrice(&*ATOM, 0);
 	println!();
 	let atom = Box::leak(Box::new(atom));
 	run_thrice(atom, 3);
 	println!();
 
 	println!("isotopes");
-	run_thrice(&RADIUM, 6);
+	run_thrice(&*RADIUM, 6);
 	println!();
 	for ident in 9 .. 12 {
 		do_work(&isotope, ident);

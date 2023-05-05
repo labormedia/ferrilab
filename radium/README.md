@@ -43,7 +43,7 @@ continue to use it. The `radium::if_atomic!` macro allows projects to simulate
 `#[cfg(target_has_atomic)]` in version-0, but is removed in version-1.
 
 This crate is `#![no_std]`-compatible, as it relies solely on the
-`loom::sync::atomic` and `core::cell` modules.
+`core::sync::atomic` and `core::cell` modules.
 
 ## Versioning
 

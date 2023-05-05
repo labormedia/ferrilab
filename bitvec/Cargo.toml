@@ -48,18 +48,16 @@ atomic = [
 default = [
 	"atomic",
 	"std",
-	"loom"
 ]
 # The standard library includes the allocator.
 std = [
 	"alloc",
 ]
-testing = [
-]
-loom = ["radium/loom", "atomic"]
+testing = []
+loom = ["atomic", "alloc"]
 
 [dependencies]
-radium = {version="1.0.0", path="../radium"}
+radium = "0.7" #{version="1.0.0", path="../radium"}
 tap = "1"
 
 [dependencies.funty]

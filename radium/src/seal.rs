@@ -1,7 +1,10 @@
-use core::{
-	cell::Cell,
-	sync::atomic::*,
-};
+use core::cell::Cell;
+
+#[cfg(not(any(loom, feature="loom")))]
+use core::sync::atomic::*;
+
+#[cfg(any(loom, feature="loom"))]
+use loom::sync::atomic::*;
 
 use crate::{
 	Atom,

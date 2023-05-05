@@ -8,8 +8,13 @@ use core::{
 		Debug,
 		Formatter,
 	},
-	sync::atomic::*,
 };
+
+#[cfg(not(any(loom, feature="loom")))]
+use core::sync::atomic::*;
+
+#[cfg(any(loom, feature="loom"))]
+use loom::sync::atomic::*;
 
 use crate::{
 	marker::{
